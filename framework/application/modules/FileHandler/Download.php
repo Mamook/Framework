@@ -1,4 +1,6 @@
-<?php /* Requires PHP5+ */
+<?php
+
+namespace Mamook\FileHandler;
 
 ###################################################################
 # File Download 2.0
@@ -12,11 +14,6 @@
 # Sample download link (browser will try to save with new file name):
 #    download_page.php?f=somefile.zip&fc=samefile_newname.zip
 ###################################################################
-
-# Get the parent class.
-require_once Utility::locateFile(MODULES.'FileHandler'.DS.'FileHandler.php');
-# Get config file
-require_once Utility::locateFile(MODULES.'FileHandler'.DS.'DownloadConfig.php');
 
 /**
 * Download

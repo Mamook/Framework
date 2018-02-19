@@ -1,4 +1,6 @@
-<?php /* framework/application/modules/FileHandler/FileHandler.php */
+<?php
+
+namespace Mamook\FileHandler;
 
 /**
  * FileHandler

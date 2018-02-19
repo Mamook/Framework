@@ -1,6 +1,6 @@
 <?php
 
-namespace Mamook\Exception;
+namespace Mamook\ExceptionHandler;
 
 interface ExceptionInterface
 {

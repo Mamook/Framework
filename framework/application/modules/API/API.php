@@ -3,10 +3,9 @@
 namespace Mamook\API;
 
 use Image;
-use Mamook\Exception\ExceptionHandler as Exception;
+use Mamook\ExceptionHandler\Exception;
 use Mamook\Validator\Validator;
-use Utility;
-use WebUtility;
+use Mamook\WebUtility\WebUtility;
 
 # Make sure the script is not accessed directly.
 if (!defined('BASE_PATH')) {
@@ -76,14 +75,11 @@ class API
     } #==== End -- setDescription
 
     /**
-     * setImageID
      * Sets the data member $image_id.
      *
      * @param    int $image_id
      *
      * @throws Exception
-     * @throws \Exception
-     * @access    private
      */
     private function setImageID($image_id)
     {
@@ -504,7 +500,6 @@ class API
     } #==== End -- fileGetContentsCurl
 
     /**
-     * post
      * Wrapper function for the API service that is loaded.
      * Posts content to the API service.
      *
@@ -513,9 +508,6 @@ class API
      * @param    string $title       Optional.
      * @param    string $description Optional.
      * @param    string $image_id    Optional.
-     *
-     * @access    public
-     * @throws \Exception
      */
     public function post($message, $url = null, $title = null, $description = null, $image_id = null)
     {

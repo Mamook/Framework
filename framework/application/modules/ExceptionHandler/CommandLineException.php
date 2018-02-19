@@ -1,11 +1,11 @@
 <?php
 
-namespace Mamook\Exception;
+namespace Mamook\ExceptionHandler;
 
 use Logger;
 use Mamook\Email\Email;
 
-class CommandLineException extends ExceptionHandler
+class CommandLineException extends Exception
 {
     /**
      * CommandLineException constructor.
@@ -15,6 +15,9 @@ class CommandLineException extends ExceptionHandler
      * @param null  $file
      * @param null  $line
      * @param array $context
+     *
+     * @throws Exception
+     * @throws \Exception
      */
     public function __construct($code = 0, $msg = null, $file = null, $line = null, $context = array())
     {

@@ -1,10 +1,8 @@
 <?php
 
-namespace Mamook\Exception;
+namespace Mamook\ExceptionHandler;
 
-use Exception;
-
-abstract class CustomException extends Exception implements ExceptionInterface
+abstract class CustomException extends \Exception implements ExceptionInterface
 {
     protected $code = 0;                            # User-defined exception code
     protected $file;                            # Source filename of exception

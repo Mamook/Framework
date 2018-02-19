@@ -3,11 +3,11 @@
 namespace Mamook\Email;
 
 use DB;
-use FileHandler;
-use Mamook\Exception\ExceptionHandler as Exception;
+use Mamook\FileHandler\FileHandler;
+use Mamook\ExceptionHandler\Exception;
+use Mamook\Utility\Utility;
 use Mamook\Validator\Validator;
 use PHPMailer\PHPMailer\PHPMailer;
-use Utility;
 
 # Make sure the script is not accessed directly.
 if (!defined('BASE_PATH')) {
@@ -494,7 +494,6 @@ class Email
     }
 
     /**
-     * sendEmail
      * Handles all emailing from one place.
      *
      * @param string      $subject
@@ -506,7 +505,6 @@ class Email
      *
      * @return bool TRUE/FALSE
      * @throws Exception
-     * @throws \Exception
      */
     public function sendEmail($subject, $to, $body, $reply_to = SMTP_FROM, $attachment = null, $is_html = MAIL_IS_HTML)
     {
@@ -735,16 +733,13 @@ class Email
     /**
      * Sends multiple an email to multiple users with a set time interval wait between emails.
      *
-     * @param array $email_data An array of (probably POST) data about the email, ie sender address, subject, message,
-     *                          etc.
+     * @param array $email_data An array of (probably POST) data about the email, ie sender address, subject, message, etc.
      *
      * @throws Exception
      */
     public function sendMultipleEmails($email_data = null)
     {
         try {
-            # Get the Utility Class.
-            require_once UTILITY_CLASS;
             # Set the Database instance to a variable.
             $db = DB::get_instance();
             # Set the Validator instance to a variable.
@@ -752,29 +747,6 @@ class Email
 
             # Set the passed email data to the appropriate data member.
             $this->setEmailData($email_data);
-
-            /*
-            # Check if there was an attachment.
-            if($email_data['file']!=0)
-            {
-                # Set the attachment to a variable.
-                $attachment=((!is_array($email_data['file'])) ? unserialize($email_data['file']) : $email_data['file']);
-            }
-            else
-            {
-                $attachment=0;
-            }
-            # Set the email message to a variable.
-            $message=htmlentities($email_data['message'], ENT_QUOTES, 'UTF-8', FALSE);
-            # Set the sender's email to a variable.
-            $sender_email=$email_data['email'];
-            # Get the email sender's name and set it to a variable.
-            $sender_name=htmlentities($email_data['realname'], ENT_QUOTES, 'UTF-8', FALSE);
-            # Set the subject to a variable.
-            $subject=htmlentities($email_data['subject'], ENT_QUOTES, 'UTF-8', FALSE);
-            # Set the "to" array to a variable.
-            $to=((!is_array($email_data['to'])) ? unserialize($email_data['to']) : $email_data['to']);
-            */
 
             # Set the attachment value to a variable.
             $attachment = $this->getAttachment();
@@ -808,21 +780,6 @@ class Email
             # Explode the ALL_USERS constant string into an array.
             $all_users = explode(' ', ALL_USERS);
 
-            /*
-            # Unserialize the to data is it is not an array already.
-            $to=((!is_array($to)) ? unserialize($to) : $to);
-
-            # Create a session with the email info.
-            $_SESSION['email']=$sender_email;
-            $_SESSION['email_body']=$message;
-            $_SESSION['email_file']=$attachment;
-            $_SESSION['email_html']=$html;
-            $_SESSION['email_subject']=$subject;
-            $_SESSION['email_to']=$to;
-            $_SESSION['MAX_FILE_SIZE']=$max_size;
-            $_SESSION['realname']=$sender_name;
-            $sesh_id=session_id();
-            */
             # Check if there is a message, a subject, and recipients.
             if (!empty($message) && !empty($to) && !empty($subject)) {
                 $all_user_like = array();
@@ -1007,47 +964,42 @@ class Email
      */
     protected function setEmailData($data = null)
     {
-        try {
-            # Check if there was email data passed to the method.
-            if ($data !== null) {
-                $this->setAttachment($data['Attachment']);
-                $this->setConfirmationTemplate($data['ConfirmationTemplate']);
-                $this->setIsHTML($data['IsHTML']);
-                $this->setMaxFileSize($data['MaxFileSize']);
-                $this->setMessage($data['Message']);
-                $this->setRecipients($data['Recipients']);
-                $this->setSenderEmail($data['SenderEmail']);
-                $this->setSenderName($data['SenderName']);
-                $this->setSiteName($data['SiteName']);
-                $this->setSubject($data['Subject']);
-                $this->setTemplate($data['Template']);
-            }
-            # Check if there is session data.
-            if (isset($_SESSION['email_subject'])) {
-                $this->setAttachment(((isset($_SESSION['email_file'])) ? $_SESSION['email_file'] : null));
-                $this->setIsHTML(((isset($_SESSION['email_html'])) ? $_SESSION['email_html'] : null));
-                $this->setMaxFileSize(((isset($_SESSION['MAX_FILE_SIZE'])) ? $_SESSION['MAX_FILE_SIZE'] : null));
-                $this->setMessage(((isset($_SESSION['email_body'])) ? $_SESSION['email_body'] : null));
-                $this->setSenderEmail(((isset($_SESSION['email'])) ? $_SESSION['email'] : null));
-                $this->setSenderName(((isset($_SESSION['realname'])) ? $_SESSION['realname'] : null));
-                $this->setSiteName(((isset($_SESSION['sitename'])) ? $_SESSION['sitename'] : null));
-                $this->setSubject(((isset($_SESSION['email_subject'])) ? $_SESSION['email_subject'] : null));
-                $this->setRecipients(((isset($_SESSION['email_to'])) ? $_SESSION['email_to'] : null));
-            }
-            # Check if there is POST data.
-            if (array_key_exists('_submit_check', $_POST)) {
-                $this->setAttachment(((isset($_POST['file'])) ? $_POST['file'] : null));
-                $this->setIsHTML(((isset($_POST['html'])) ? $_POST['html'] : null));
-                $this->setMaxFileSize(((isset($_POST['MAX_FILE_SIZE'])) ? $_POST['MAX_FILE_SIZE'] : null));
-                $this->setMessage(((isset($_POST['message'])) ? $_POST['message'] : null));
-                $this->setSenderEmail(((isset($_POST['email'])) ? $_POST['email'] : null));
-                $this->setSenderName(((isset($_POST['realname'])) ? $_POST['realname'] : null));
-                $this->setSiteName(((isset($_POST['sitename'])) ? $_POST['sitename'] : null));
-                $this->setSubject(((isset($_POST['subject'])) ? $_POST['subject'] : null));
-                $this->setRecipients(((isset($_POST['to'])) ? $_POST['to'] : null));
-            }
-        } catch (Exception $e) {
-            throw $e;
+        if ($data !== null) {
+            $this->setAttachment($data['Attachment']);
+            $this->setConfirmationTemplate($data['ConfirmationTemplate']);
+            $this->setIsHTML($data['IsHTML']);
+            $this->setMaxFileSize($data['MaxFileSize']);
+            $this->setMessage($data['Message']);
+            $this->setRecipients($data['Recipients']);
+            $this->setSenderEmail($data['SenderEmail']);
+            $this->setSenderName($data['SenderName']);
+            $this->setSiteName($data['SiteName']);
+            $this->setSubject($data['Subject']);
+            $this->setTemplate($data['Template']);
+        }
+        # Check if there is session data.
+        if (isset($_SESSION['email_subject'])) {
+            $this->setAttachment(((isset($_SESSION['email_file'])) ? $_SESSION['email_file'] : null));
+            $this->setIsHTML(((isset($_SESSION['email_html'])) ? $_SESSION['email_html'] : null));
+            $this->setMaxFileSize(((isset($_SESSION['MAX_FILE_SIZE'])) ? $_SESSION['MAX_FILE_SIZE'] : null));
+            $this->setMessage(((isset($_SESSION['email_body'])) ? $_SESSION['email_body'] : null));
+            $this->setSenderEmail(((isset($_SESSION['email'])) ? $_SESSION['email'] : null));
+            $this->setSenderName(((isset($_SESSION['realname'])) ? $_SESSION['realname'] : null));
+            $this->setSiteName(((isset($_SESSION['sitename'])) ? $_SESSION['sitename'] : null));
+            $this->setSubject(((isset($_SESSION['email_subject'])) ? $_SESSION['email_subject'] : null));
+            $this->setRecipients(((isset($_SESSION['email_to'])) ? $_SESSION['email_to'] : null));
+        }
+        # Check if there is POST data.
+        if (array_key_exists('_submit_check', $_POST)) {
+            $this->setAttachment(((isset($_POST['file'])) ? $_POST['file'] : null));
+            $this->setIsHTML(((isset($_POST['html'])) ? $_POST['html'] : null));
+            $this->setMaxFileSize(((isset($_POST['MAX_FILE_SIZE'])) ? $_POST['MAX_FILE_SIZE'] : null));
+            $this->setMessage(((isset($_POST['message'])) ? $_POST['message'] : null));
+            $this->setSenderEmail(((isset($_POST['email'])) ? $_POST['email'] : null));
+            $this->setSenderName(((isset($_POST['realname'])) ? $_POST['realname'] : null));
+            $this->setSiteName(((isset($_POST['sitename'])) ? $_POST['sitename'] : null));
+            $this->setSubject(((isset($_POST['subject'])) ? $_POST['subject'] : null));
+            $this->setRecipients(((isset($_POST['to'])) ? $_POST['to'] : null));
         }
     }
 }

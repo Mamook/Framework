@@ -4,7 +4,7 @@ namespace Mamook\API;
 
 use Google_Client;
 use Google_Service_YouTube;
-use Utility;
+use Mamook\Utility\Utility;
 
 # Make sure the script is not accessed directly.
 if (!defined('BASE_PATH')) {

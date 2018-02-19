@@ -1,10 +1,9 @@
 <?php
 
-namespace Mamook\Exception;
+namespace Mamook\ExceptionHandler;
 
 use Document;
-use Exception;
-use Utility;
+use Mamook\Utility\Utility;
 
 /**
  * @param $code
@@ -17,7 +16,7 @@ use Utility;
  */
 function myErrorHandler($code, $msg, $file, $line)
 {
-    $error = new ExceptionHandler($code, $msg, $file, $line);
+    $error = new Exception($code, $msg, $file, $line);
     if ($error === true) {
         # Check if the link is to an index page.
         if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], ERROR_PAGE) === false) {
@@ -41,7 +40,7 @@ function myErrorHandler($code, $msg, $file, $line)
  *        and the line number of the statement that generated the error.
  * The function then becomes responsible for managing the error.
  */
-class ExceptionHandler extends Exception
+class Exception extends \Exception
 {
     protected $code = 0;                          # User-defined exception code
     protected $file;                            # Source filename of exception
