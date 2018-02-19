@@ -1,4 +1,7 @@
 <?php
+
+namespace Mamook\Exception;
+
 interface ExceptionInterface
 {
 	# Protected methods inherited from Exception class

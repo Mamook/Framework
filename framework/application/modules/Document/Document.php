@@ -884,15 +884,16 @@ class Document
 		return (($code>=200) && ($code<400));
 	} #==== End -- pageExists
 
-	/**
-	 * redirect
-	 *
-	 * Try PHP header redirect, then Java redirect, then try http redirect.
-	 *
-	 * @param	$url					The url to redirect to.
-	 * @param	$delay					The delay in seconds before redirecting.
-	 * @access	public
-	 */
+    /**
+     * redirect
+     * Try PHP header redirect, then Java redirect, then try http redirect.
+     *
+     * @param string $url   The url to redirect to.
+     * @param int    $delay The delay in seconds before redirecting.
+     *
+     * @access public
+     * @return bool
+     */
 	public function redirect($url, $delay=0, $clear_session_data=FALSE)
 	{
 		# Check if the URL is empty.

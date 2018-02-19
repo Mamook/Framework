@@ -1,8 +1,8 @@
-<?php /* framework/application/controllers/api/index.php */
+<?php
 
-# Get the API Class.
-require_once Utility::locateFile(MODULES.'API'.DS.'API.php');
 # Create a new API object.
+use Mamook\API\API;
+
 $api_obj=new API();
 
 $api_key=(isset($_REQUEST['api_key']) ? $_REQUEST['api_key'] : '');
