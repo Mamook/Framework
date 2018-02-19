@@ -1,0 +1,48 @@
+# Ignore these file(s)
+# Global
+*.DS_Store
+
+# Root
+.env
+.idea/
+/.vagrant
+/vendor
+settings.php
+
+# Bodega
+bodega/**
+
+# Cache
+cache/**
+
+# Custom Sessions
+custom_sessions/**
+
+# Data
+/data/**
+!/data/*.sample
+!/data/path_definitions.php
+
+# Logs
+logs/**
+
+# Public
+public/media/audio/files/**
+public/media/videos/files/**
+
+# Tmp
+tmp/**
+
+
+# Do not ignore these files
+# Root
+!.gitignore
+
+# Bodega
+!bodega/audio
+!bodega/cv
+!bodega/premium
+!bodega/videos
+
+# Cache
+!cache/screenshots

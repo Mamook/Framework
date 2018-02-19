@@ -1,0 +1,79 @@
+<?php /* data/email_definitions.php */
+
+/*
+ *---------------------------------------------------------------
+ * EMAILING DEFINITIONS
+ *---------------------------------------------------------------
+ *
+ * Emailing values needed by the Email class.
+ *
+ */
+
+# Define the amount of emails you want to send per period.
+# If 0, batch processing is disabled and messages are sent out as fast as possible.
+define('MAILQUEUE_BATCH_SIZE', 1);
+
+# Define the length of one batch processing period, in seconds (3600 is an hour)
+//define('MAILQUEUE_BATCH_PERIOD', 3600);
+
+# To avoid overloading the server that sends your email, you can add a little delay
+# between messages that will spread the load of sending.
+# You will need to find a good value for your own server.
+# Value is in seconds.
+define('MAILQUEUE_THROTTLE', 40);
+
+# This will try to automatically change the delay between messages to make sure that
+# the MAILQUEUE_BATCH_SIZE (above) is spread evently over MAILQUEUE_BATCH_PERIOD, instead
+# of firing the Batch in the first few minutes of the period and then waiting for the next period.
+# This only works with mailqueue_throttle off.
+//define('MAILQUEUE_AUTOTHROTTLE', 1);
+
+# Production site.
+if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING===FALSE)
+{
+	# Set to TRUE to use SMTP to send out emails, FALSE to use PHP's mail() function.
+	define('USE_SMTP', FALSE);
+	# Define the port to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PORT', '587');
+	# Define the host to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_HOST', '');
+	# Define the user to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_USER', '');
+	# Define the password to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PASS', '');
+}
+# Staging site.
+elseif(RUN_ON_STAGING===TRUE)
+{
+	# Set to TRUE to use SMTP to send out emails, FALSE to use PHP's mail() function.
+	define('USE_SMTP', FALSE);
+	# Define the port to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PORT', '587');
+	# Define the host to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_HOST', '');
+	# Define the user to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_USER', '');
+	# Define the password to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PASS', '');
+}
+# Dev site.
+else
+{
+	# Set to TRUE to use SMTP to send out emails, FALSE to use PHP's mail() function.
+	define('USE_SMTP', FALSE);
+	# Define the port to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PORT', '');
+	# Define the host to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_HOST', '');
+	# Define the user to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_USER', '');
+	# Define the password to use for SMTP (only needed if SMTP is set to TRUE)
+	define('SMTP_PASS', '');
+}
+
+# Define the email to use in the "from" field for SMTP (only needed if SMTP is set to TRUE)
+define('SMTP_FROM', SMTP_USER);
+# Define the type of security to use for SMTP (only needed if SMTP is set to TRUE. Options are 'tls', 'ssl', or '')
+define('SMTP_SECURE', 'tls');
+# Set to TRUE to send emails as html and FALSE to send as text.
+define('MAIL_IS_HTML', TRUE);

@@ -1,0 +1,1 @@
+function empty(a,b){return""==a.value?(alert(b),!1):!0}function integer(a,b){return parseInt(a.value)!=a.value?(alert(b),!1):!0}function email(a,b){return!/.+@.+\..+./.test(a.value)?(alert(b),!1):!0}document.getElementById&&(document.createElement&&document.getElementsByTagName)&&(document.getElementsByTagName("form")[0].onsubmit=function(){return validate()});

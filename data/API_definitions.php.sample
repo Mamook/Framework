@@ -1,0 +1,122 @@
+<?php  /* data/API_definitions.php */
+
+# Site API Variables
+define('DEFAULT_AUDIO_CATEGORY', '');
+define('DEFAULT_VIDEO_CATEGORY', '');
+define('DEFAULT_AUDIO_PLAYLIST', 'Audio');
+define('DEFAULT_VIDEO_PLAYLIST', 'Videos');
+# NOTE: What's a better way to do this?
+define('DEFAULT_AUDIO_THUMBNAIL', 'Audio.Default.Thumbnail.jpg');
+define('DEFAULT_VIDEO_THUMBNAIL', 'Thumbnail.Coming.Soon.png');
+define('FW_POPUP_HANDLE', 'fwpopup');
+define('FW_API_KEY', '');
+
+# AddThis Variables
+define('ADDTHIS_ID', '');
+define('ADDTHIS_APP_ID', '');
+
+# Amazon Variables
+define('AMAZON_ACCESS_KEY', '');
+define('AMAZON_ASS_TAG', '');
+define('AMAZON_SECRET_KEY', '');
+
+# Bit.ly Variables
+define('BITLY_USERNAME', '');
+define('BITLY_KEY', '');
+define('BITLY_ACCESS_TOKEN', '');
+define('BITLY_CLIENT_ID', '');
+define('BITLY_CLIENT_SECRET', '');
+
+# Facebook Variables
+# Production site.
+if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
+{
+	define('FB_APP_ID', '');
+	define('FB_APP_SECRET', '');
+	# Must be a never expire token.
+	#	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
+	define('FB_PAGE_ACCESS_TOKEN', '');
+}
+# Staging & Dev site.
+else
+{
+	define('FB_APP_ID', '');
+	define('FB_APP_SECRET', '');
+	# Must be a never expire token.
+	#	https://www.rocketmarketinginc.com/blog/get-never-expiring-facebook-page-access-token/
+	define('FB_PAGE_ACCESS_TOKEN', '');
+}
+# FB_PAGE_ID is requred for AddThis (framework/application/js/AddThis.php).
+define('FB_PAGE_ID', '');
+# FB_URL required for /social/ page.
+define('FB_URL', '');
+
+# Google API variables
+define('GOOGLE_CLIENT_ID', '');
+define('GOOGLE_CLIENT_SECRET', '');
+define('GOOGLE_REFRESH_TOKEN', '');
+
+# Google+ Platform API
+define('GOOGLE_PLUS_PAGE_ID', '');
+define('GOOGLE_PLUS_URL', 'plus.google.com/');
+define('GOOGLE_PLUS_PROJECT_ID', '');
+
+# Google APPS
+define('GOOGLE_APPS_CALENDAR', 'calendar.jamtheforce.com');
+define('GOOGLE_APPS_DRIVE', 'docs.jamtheforce.com');
+define('GOOGLE_APPS_MAIL', 'mail.jamtheforce.com');
+define('GOOGLE_APPS_SITES', 'sites.jamtheforce.com');
+define('GOOGLE_APPS_TALK', 'google.com/talk');
+
+# reCaptcha API keys (see reCaptcha.net)
+# Production site.
+if(RUN_ON_DEVELOPMENT===FALSE && RUN_ON_STAGING==FALSE)
+{
+	define('CAPTCHA_PUBLICKEY', '');
+	define('CAPTCHA_PRIVATEKEY', '');
+}
+# Staging & Dev site.
+else
+{
+	define('CAPTCHA_PUBLICKEY', '');
+	define('CAPTCHA_PRIVATEKEY', '');
+}
+
+# Soundcloud Variables
+define('SOUNDCLOUD_AUTH_URL', 'https://soundcloud.com/connect');
+define('SOUNDCLOUD_CLIENT_ID', '');
+define('SOUNDCLOUD_CLIENT_SECRET', '');
+define('SOUNDCLOUD_TOKEN', '');
+define('SOUNDCLOUD_TOKEN_URL', 'https://api.soundcloud.com/oauth2/token');
+define('SOUNDCLOUD_USER_ID', '');
+define('SOUNDCLOUD_USERNAME', '');
+define('SOUNDCLOUD_PERMALINK', '');
+define('SOUNDCLOUD_URL', '');
+
+# Twitter Variables
+# TWITTER_USERNAME required to get tweet (getFeed) and for AddThis (framework/application/js/AddThis.php).
+define('TWITTER_USERNAME', '');
+# TWITTER_URL required for /social/ page.
+define('TWITTER_URL', '');
+define('TWITTER_CONSUMER_KEY', '');
+define('TWITTER_CONSUMER_SECRET', '');
+# Access Token.
+define('TWITTER_TOKEN', '');
+define('TWITTER_TOKEN_SECRET', '');
+
+# Vimeo Variables
+define('VIMEO_CONSUMER_KEY', '');
+define('VIMEO_SECRET_KEY', '');
+define('VIMEO_URL', '');
+
+# Websnapr Variables
+define('WEBSNAPR_DEV_KEY', '');
+
+# YouTube Variables
+define('YOUTUBE_CLIENT_ID', '');
+define('YOUTUBE_CLIENT_SECRET', '');
+define('YOUTUBE_DEV_KEY', '');
+define('YOUTUBE_REFRESH_TOKEN', '');
+define('YOUTUBE_USERNAME', '');
+# YOUTUBE_CHANNELID is requred for AddThis (framework/application/js/AddThis.php).
+define('YOUTUBE_CHANNELID', '');

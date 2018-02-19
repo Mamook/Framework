@@ -1,0 +1,2 @@
+function MM_findObj(c,a){var b,d,a=a||document;if(0<(b=c.indexOf("?"))&&parent.frames.length)a=parent.frames[c.substring(b+1)].document,c=c.substring(0,b);if(!(d=a[c])&&a.all)d=a.all[c];for(b=0;!d&&b<a.forms.length;b++)d=a.forms[b][c];for(b=0;!d&&a.layers&&b<a.layers.length;b++)d=MM_findObj(c,a.layers[b].document);!d&&a.getElementById&&(d=a.getElementById(c));return d}
+function toggle(c,a){var b=MM_findObj(c);b.style.display="block"==b.style.display;document.images&&(document.images[a].src="/scripts/sitemap/images/minus.gif"==b.style.display)};

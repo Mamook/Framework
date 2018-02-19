@@ -1,0 +1,370 @@
+Instructions for setting up a new "clean" site:
+
+Must have the following installed:
+Git
+PHP 5.3+ (with Curl & GD Library)
+MySQL
+FFMPEG
+
+These also need to be installed for developers:
+Git Flow
+
+
+1. Repository (client_website is replaced with the clients name, this is just an example):
+	1a. Create local repository:
+
+		For the development machine do the following commands.
+			Commands:
+				git clone git@github.com:Mamook/TheFramework.git
+				git pull
+				git submodule update --init --recursive
+
+
+	1b. Install Git Flow Hooks & Enable Git Flow:
+		What does Git Flow Hooks do?
+			Prevent direct commits to the master branch.
+			Prevent merge marker commits.
+			Automatically bump versions when starting a release or hotfix. Versions are generated, written to file and committed.
+			Automatically specify tag messages.
+
+		Install Git Flow Hooks:
+			Clone this repository somewhere on your disk.
+			For the rest of this, use command line git and not a GUI like Tower.
+			Command:
+				git clone git@github.com:jaspernbrouwer/git-flow-hooks.git
+
+			Whenever your read /path/to/git-flow-hooks, replace it with the actual path to your clone/working copy.
+
+			OS X:
+				OS X doesn't support sort -V, which is used to sort git tags by version number, which in turn is needed to correctly bump versions.
+				On OS X you can install coreutils (using MacPorts or Homebrew).
+				Optionally, you can use the configuration option VERSION_SORT to point to a different command. See Configuration below.
+
+		Configuration
+			Copy the file /path/to/git-flow-hooks/modules/git-flow-hooks-config.sh.dist to .git/git-flow-hooks-config.sh and change whatever you like. This is completely optional.
+
+		Activate Git Flow & Git Flow Hooks:
+			Initialize git-flow.
+			Command:
+				git flow init
+
+			It will ask you some questions, the last will be Hooks and filters directory?, which you can answer with /path/to/git-flow-hooks.
+			If you've already initialized git-flow, you can still set/change the path manually.
+
+			You can use "--global" so Git always uses this directory for Git Flow Hooks.
+			Command:
+				git config [--global] gitflow.path.hooks /path/to/git-flow-hooks
+
+2. Make a copy of the configuration & cron files:
+	settings.php.sample                         -> settings.php
+	cron/api_sync.php.sample                    -> cron/api_sync.php
+	cron/new_media.php.sample                   -> cron/new_media.php
+	data/API_definitions.php.sample             -> data/API_definitions.php
+	data/database_definitions.php.sample        -> data/database_definitions.php
+	data/email_definitions.php.sample           -> data/email_definitions.php
+	data/formmail.ini.sample                    -> data/formmail.ini
+	data/init.php.sample                        -> data/init.php
+	data/user_privileges.php.sample	            -> data/user_privileges.php
+
+	If you want WordPress integration:
+		data/WordPress_settings.php.sample      -> data/WordPress_settings.php
+
+	Command (assumes you're in the root folder):
+		cp settings.php.sample settings.php && cp cron/api_sync.php.sample cron/api_sync.php && cp cron/new_media.php.sample cron/new_media.php && cp data/API_definitions.php.sample data/API_definitions.php && cp data/database_definitions.php.sample data/database_definitions.php && cp data/email_definitions.php.sample data/email_definitions.php && cp data/formmail.ini.sample data/formmail.ini && cp data/init.php.sample data/init.php && cp data/user_privileges.php.sample data/user_privileges.php
+
+	If you want WordPress integration:
+	Command (assumes you're in the root folder):
+		cp data/WordPress_settings.php.sample data/WordPress_settings.php
+
+3. Make sure the following folders are readable and writable (777):
+	bodega/
+	cache/
+	custom_sessions/
+	data/formmail.ini
+	logs/
+	public/images/
+	public/images/original/
+	public/media/audio/files/
+	public/media/videos/files/
+	tmp/
+
+	Command (assumes you're in the root folder):
+		chmod 777 bodega/ bodega/audio/ bodega/cv/ bodega/premium/ bodega/videos/ cache/ custom_sessions/ data/formmail.ini logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/
+
+4. Edit root->settings.php:
+	Search for each constant (string in capital letters).
+
+	a. DEVELOPMENT_DOMAIN - Enter the development domain name.
+	b. STAGING_DOMAIN - Enter the staging domain name.
+	c. SECURE_URL - Change to https:// if using HTTPS protocal.
+	c. SECURE_PORT - Enter the secure port number.
+	d. SESSIONS_NAME - Change the Session Name.
+	e. PP_EMAIL - Change your paypal email.
+	f. WP_INSTALLED - Change to TRUE for Wordpress integration.
+	g. MYKEY - Change the encryption key.
+
+5. Edit the following files (mandatory):
+	a. data/database_definitions.php
+	b. data/formmail.ini
+		Change webmaster email address
+	c. data/user_privileges.php
+		Change email addresses
+
+	d. If you want WordPress integration:
+		data/WordPress_settings.php
+			Line 12 - enter the prefix (if any) for the WordPress Database tables.
+			Go to https://api.wordpress.org/secret-key/1.1/salt/ to generate keys for Lines 23-30
+			Line 33-61 - edit as needed.
+
+6. Edit the following files (optional):
+	a. data/API_definitions.php
+	b. data/email_definitions.php
+
+7. Edit root->
+	a. Line 87 & 92 - enter primary cascading style sheet name and any "always load" style sheets.
+	b. Line 96 & 99 - enter any "always load" javascripts.
+
+8. Edit path_to_WordPress_installation/wp-includes/wp-db.php lines 12-36. Change to:
+	/**
+	 * @since 0.71
+	 */
+	if(!defined('EZSQL_VERSION'))
+	define( 'EZSQL_VERSION', 'WP1.25' );
+
+	/**
+	 * @since 0.71
+	 */
+	if(!defined('OBJECT'))
+	define( 'OBJECT', 'OBJECT' );
+	define( 'object', 'OBJECT' ); // Back compat.
+
+	/**
+	 * @since 2.5.0
+	 */
+	if(!defined('OBJECT_K'))
+	define( 'OBJECT_K', 'OBJECT_K' );
+
+	/**
+	 * @since 0.71
+	 */
+	if(!defined('ARRAY_A'))
+	define( 'ARRAY_A', 'ARRAY_A' );
+
+	/**
+	 * @since 0.71
+	 */
+	if(!defined('ARRAY_N'))
+	define( 'ARRAY_N', 'ARRAY_N' );
+
+9. In path_to_WordPress_installation/wp-load.php, after line 20, add:
+
+	# Define the location of this page. - BigTalk :)
+	if(!defined('HERE_PATH'))
+	define('HERE_PATH', ltrim($_SERVER['PHP_SELF'], '/'));
+
+	/** Define ABSPATH as this file's directory */
+	define( 'ABSPATH', dirname(__FILE__) . '/' );
+
+	# Get Custom settings - BigTalk :)
+	require_once str_replace('public/FWE/', '', str_replace('\\', '/', ABSPATH)).'settings.php';
+
+10. If you need to make changes to the FormMail script, copy formmail.php into application/modules/Vendor/FormMail/ and edit it as needed
+	Linux Command (assumes you're in the root directory):
+		mkdir -p application/modules/Vendor/FormMail/ && cp framework/application/modules/Vendor/FormMail/formmail.php application/modules/Vendor/FormMail/formmail.php
+
+11. Edit FormMail templates as needed:
+	templates/fm/confirmation_template.php
+	templates/fm/email_template.php
+	templates/fm/email_users_template.php
+	templates/fm/form_email_template.txt
+	templates/fm/form_email_user_template.txt
+
+12. Create a MySQL Database and import dev/sql/import_db.sql
+
+13. Create a new public/w3c/p3p.xml file (use the IBM app for Windows.)
+
+14. FFMPEG needs to be installed on the server for Audio & Video.
+	A.	Make the needed directories (in root of user directory $HOME)
+		1.	mkdir tmp
+		2.	mkdir src
+		3.	mkdir opt
+	B.	 Set folder permissions
+		1.	chmod 777 tmp
+		2.	chmod 775 opt
+	C.	Export variables
+		1.	export TMPDIR=$HOME/tmp
+		2.	export PATH=$HOME/opt/bin:$PATH
+		3.	export LD_LIBRARY_PATH=$HOME/opt/lib:/usr/local/lib:$LD_LIBRARY_PATH
+		4.	export CPATH=$HOME/opt/include:/usr/local/include:$CPATH
+		5.	export LIBRARY_PATH=$HOME/opt/lib:/usr/local/lib:$LIBRARY_PATH
+	D.	Install dependencies.
+		1.	autoconf:
+			cd $HOME/src
+			wget http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+			tar xzvf autoconf-2.69.tar.gz
+			cd autoconf-2.69
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f autoconf-2.69
+			rm autoconf-2.69.tar.gz
+		2.	yasm:
+			cd $HOME/src
+			wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+			tar xzvf yasm-1.3.0.tar.gz
+			cd yasm-1.3.0
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f yasm-1.3.0
+			rm yasm-1.3.0.tar.gz
+		3.	libogg:
+			cd $HOME/src
+			wget http://downloads.xiph.org/releases/ogg/libogg-1.3.2.tar.gz
+			tar xzvf libogg-1.3.2.tar.gz
+			cd libogg-1.3.2
+			./configure --prefix=$HOME/opt --disable-shared
+			make
+			make install
+			cd ..
+			rm -R -f libogg-1.3.2
+			rm libogg-1.3.2.tar.gz
+		4.	libvorbis:
+			cd $HOME/src
+			wget http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.gz
+			tar xzvf libvorbis-1.3.5.tar.gz
+			cd libvorbis-1.3.5
+			./configure --prefix=$HOME/opt --disable-shared
+			make
+			make install
+			cd ..
+			rm -R -f libvorbis-1.3.5
+			rm libvorbis-1.3.5.tar.gz
+		5.	libvpx:
+			cd $HOME/src
+			git clone http://git.chromium.org/webm/libvpx.git
+			cd libvpx
+			./configure --prefix=$HOME/opt --disable-shared --disable-examples --disable-unit-tests
+			make
+			make install
+			cd ..
+			rm -R -f libvpx
+		6.	libsdl:
+			cd $HOME/src
+			wget http://www.libsdl.org/release/SDL-1.2.15.tar.gz
+			tar xzvf SDL-1.2.15.tar.gz
+			cd SDL-1.2.15
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f SDL-1.2.15
+			rm SDL-1.2.15.tar.gz
+		7.	x264:
+			cd $HOME/src
+			git clone --depth 1 git://git.videolan.org/x264
+			cd x264
+			./configure --prefix=$HOME/opt --enable-shared --disable-asm
+			make
+			make install
+			cd ..
+			rm -R -f x264
+		8.	fdk-aac:
+			cd $HOME/src
+			git clone --depth 1 git://github.com/mstorsjo/fdk-aac.git
+			cd fdk-aac
+			autoreconf -fiv
+			./configure --prefix=$HOME/opt --enable-shared
+			make
+			make install
+			cd ..
+			rm -R -f fdk-aac
+		9.	opus:
+			cd $HOME/src
+			git clone --depth 1 git://git.xiph.org/opus.git
+			cd opus
+			./autogen.sh
+			./configure --prefix=$HOME/opt --enable-shared
+			make
+			make install
+			cd ..
+			rm -R -f opus
+		10.	lame:
+			cd $HOME/src
+			wget http://nchc.dl.sourceforge.net/sourceforge/lame/lame-398.tar.gz
+			tar xzvf lame-398.tar.gz
+			cd lame-398
+			./configure --prefix=$HOME/opt --enable-shared
+			make
+			make install
+			cd ..
+			rm -R -f lame-398
+			rm lame-398.tar.gz
+		11.	amr:
+			cd $HOME/src
+			wget ftp://ftp.penguin.cz/pub/users/utx/amr/amrnb-11.0.0.0.tar.bz2
+			wget ftp://ftp.penguin.cz/pub/users/utx/amr/amrwb-11.0.0.0.tar.bz2
+			bzip2 -d  amrnb-11.0.0.0.tar.bz2
+			bzip2 -d  amrwb-11.0.0.0.tar.bz2
+			tar xvf  amrnb-11.0.0.0.tar
+			tar xvf  amrwb-11.0.0.0.tar
+			cd amrnb-11.0.0.0
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			cd amrwb-11.0.0.0
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f amrnb-11.0.0.0
+			rm amrnb-11.0.0.0.tar
+			rm -R -f amrwb-11.0.0.0
+			rm amrwb-11.0.0.0.tar
+		12.	faac:
+			cd $HOME/src
+			wget http://downloads.sourceforge.net/faac/faac-1.28.tar.gz
+			tar -xzf faac-1.28.tar.gz
+			cd faac-1.28
+			./bootstrap
+			./configure --prefix=$HOME/opt
+			make
+			make install
+			cd ..
+			rm -R -f faac-1.28
+			rm faac-1.28.tar.gz
+		13.	theora:
+			cd $HOME/src
+			wget http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
+			bzip2 -d libtheora-1.1.1.tar.bz2
+			tar xvf  libtheora-1.1.1.tar
+			cd libtheora-1.1.1
+			./configure --prefix=$HOME/opt --disable-shared
+			make
+			make install
+			cd ..
+			rm -R -f libtheora-1.1.1
+			rm libtheora-1.1.1.tar
+		14.	xvid:
+			cd $HOME/src
+			wget http://downloads.xvid.org/downloads/xvidcore-1.3.2.tar.gz
+			tar -zxf xvidcore-1.3.2.tar.gz
+			cd xvidcore/build/generic
+			./configure --prefix=$HOME/opt --disable-shared
+			make
+			make install
+			cd ..
+			rm -R -f xvidcore
+			rm xvidcore-1.3.2.tar.gz
+	E.	Install ffmpeg
+		cd $HOME/src
+		git clone git://source.ffmpeg.org/ffmpeg.git
+		cd ffmpeg
+		./configure --prefix=/home/cwis/opt --enable-cross-compile --enable-shared --enable-gpl --enable-libass --enable-libfaac --enable-libfdk-aac --enable-libx264 --enable-libvpx --enable-libvorbis -–enable-libamr-nb -–enable-libamr-wb --enable-libxvid --enable-libtheora --enable-libfaac --enable-nonfree --enable-version3 --arch=amd64 --target-os=linux -–extra-cflags=-I$HOME/opt/include -–extra-ldflags=-L$HOME/opt/lib
+		make
+		make install
+		cd ..
+		rm -R -f ffmpeg

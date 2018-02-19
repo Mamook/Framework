@@ -1,0 +1,17 @@
+/* CSS Document - for Internet Explorer*/
+
+/**********************************/
+/***       Core HTML Setup      ***/
+/***        CSS3 Document       ***/
+/**********************************/
+
+
+/*centers entire page*/
+body {
+	text-align:center
+}
+/*end of centering entire page*/
+
+#wrapper {
+	text-align:left;
+}
