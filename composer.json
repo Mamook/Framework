@@ -1,6 +1,10 @@
 {
   "name": "mamook/framework",
   "description": "PHP Framework/CMS",
+  "keywords": [
+    "framework",
+    "mamook"
+  ],
   "type": "project",
   "license": "MIT",
   "minimum-stability": "stable",
@@ -32,5 +36,10 @@
       "@php -r \"file_exists('data/init.php') || copy('data/init.php.sample', 'data/init.php');\"",
       "@php -r \"file_exists('data/user_privileges.php') || copy('data/user_privileges.php.sample', 'data/user_privileges.php');\""
     ]
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
   }
 }
