@@ -20,5 +20,17 @@
         "framework/application/modules/"
       ]
     }
+  },
+  "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+      "@php -r \"file_exists('settings.php') || copy('settings.php.sample', 'settings.php');\"",
+      "@php -r \"file_exists('data/API_definitions.php') || copy('data/API_definitions.php.sample', 'data/API_definitions.php');\"",
+      "@php -r \"file_exists('data/database_definitions.php') || copy('data/database_definitions.php.sample', 'data/database_definitions.php');\"",
+      "@php -r \"file_exists('data/email_definitions.php') || copy('data/email_definitions.php.sample', 'data/email_definitions.php');\"",
+      "@php -r \"file_exists('data/formmail.ini') || copy('data/formmail.ini.sample', 'data/formmail.ini');\"",
+      "@php -r \"file_exists('data/init.php') || copy('data/init.php.sample', 'data/init.php');\"",
+      "@php -r \"file_exists('data/user_privileges.php') || copy('data/user_privileges.php.sample', 'data/user_privileges.php');\""
+    ]
   }
 }
