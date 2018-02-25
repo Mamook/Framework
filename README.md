@@ -1,8 +1,8 @@
 # Framework
 The framework that powers [Mamook](https://github.com/Mamook/Mamook)
 
-## Note
-This package won't fully work until routing is added.
+## Install
+Make sure your project directory is empty and run `composer create-project mamook/framework .`
 
 ## License
 
