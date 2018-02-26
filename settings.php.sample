@@ -1,4 +1,7 @@
-<?php /* settings.php */
+<?php
+
+use Dotenv\Dotenv;
+use Mamook\Validator\Validator;
 
 header('p3p: CP="ALL DSP COR CURa ADMa DEVa TAIa OUR BUS IND UNI COM NAV INT"');
 # Make explicitly sure the client sets the correct encoding when displaying the generated HTML file.
@@ -24,7 +27,7 @@ define('BASE_PATH', realpath(dirname(__FILE__)) . DS);
 
 require_once BASE_PATH . 'vendor/autoload.php';
 
-(new \Dotenv\Dotenv(__DIR__))->load();
+(new Dotenv(__DIR__))->load();
 
 # Define the path to data. (ends with a slash)
 define('DATA_FILES', BASE_PATH . 'data' . DS);
@@ -147,9 +150,6 @@ define('MONTH_DD_YEAR_TIME', date('F d, Y - G:i:s'));
 # F d, Y - g:i:s a (T) (ie: December 09, 2008 - 9:09:33 pm (PST))
 define('MONTH_DD_YEAR_12TIME_TZ', date('F d, Y - g:i:s a (T)'));
 
-# Make sure the utility methods are available (get the Utility Class).
-require_once UTILITY_CLASS;
-
 # Get the database definitions.
 require DATA_FILES . 'database_definitions.php';
 
@@ -171,8 +171,6 @@ if (RUN_ON_STAGING === true OR RUN_ON_DEVELOPMENT === true) {
 # The port the server is using for ssl. (default is 443)
 define('SECURE_PORT', '443');
 
-# Get the Validator Class.
-require_once Utility::locateFile(MODULES . 'Validator' . DS . 'Validator.php');
 # Instantiate a general Validating object.
 $validator = Validator::getInstance();
 

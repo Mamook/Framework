@@ -1,4 +1,6 @@
-<?php /* framework/application/modules/Encryption/Encryption.php */
+<?php
+
+namespace Mamook\Encryption;
 
 /**
  * Encryption

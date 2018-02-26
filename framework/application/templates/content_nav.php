@@ -1,4 +1,6 @@
-<?php /* framework/application/templates/content_nav.php */
+<?php
+
+use Mamook\Document\Document;
 
 echo '<ul class="nav-2">',
 	'<li class="list-nav-2', Document::addHereClass(ADMIN_URL.'ManageContent/content/', FALSE, FALSE), '">',

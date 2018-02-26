@@ -1,3 +1,4 @@
+
 <?php /* framework/application/templates/forms/search_form_defaults.php */
 
 $search_branch=NULL;

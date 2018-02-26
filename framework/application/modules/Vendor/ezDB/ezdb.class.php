@@ -91,13 +91,17 @@ class DB
 		$class_name = strtolower('ezdb_'.$type);
 		include dirname(__FILE__).DIRECTORY_SEPARATOR.$class_name.'.class.php';
 
-		if(!self::$DB = new $class_name())
-		{
-			self::$error = self::$DB->error;
-			self::$errno = self::$DB->errno;
+		self::$DB = new $class_name;
+		//var_dump(self::$DB);
+		//var_dump((new $class_name));exit;
 
-			return false;
-		}
+		//if(!self::$DB = new $class_name())
+		//{
+			//self::$error = self::$DB->error;
+			//self::$errno = self::$DB->errno;
+
+			//return false;
+		//}
 
 		return true;
 	}

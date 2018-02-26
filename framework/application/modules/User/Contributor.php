@@ -1,11 +1,12 @@
-<?php /* Requires PHP5+ */
+<?php
 
 namespace Mamook\User;
 
 use DB;
 use ezDB_Error;
-use IP;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\IP\IP;
+use Mamook\Validator\Validator;
 
 # Make sure the script is not accessed directly.
 if (!defined('BASE_PATH')) {
@@ -18,8 +19,6 @@ if (!defined('BASE_PATH')) {
  */
 class Contributor extends User
 {
-    /*** data members ***/
-
     protected $all_contributors = null;
     protected $cont_id = null;
     protected $cont_fname = null;
@@ -31,9 +30,6 @@ class Contributor extends User
     protected $cont_organization = null;
     protected $cont_privacy;
     protected $user = null;
-    /*** End data members ***/
-
-    /*** mutator methods ***/
 
     /**
      * getAllContributors
@@ -209,10 +205,6 @@ class Contributor extends User
     {
         return $this->user;
     }
-
-    /*** End mutator methods ***/
-
-    /*** accessor methods ***/
 
     /**
      * addContributor
@@ -417,7 +409,6 @@ class Contributor extends User
     }
 
     /**
-     * getContributors
      * Retrieves records from the `contributors` table.
      *
      * @param        $limit     (The LIMIT of the records.)
@@ -427,7 +418,7 @@ class Contributor extends User
      * @param        $and_sql   (Extra AND statements in the query.)
      *
      * @return    Boolean (TRUE if records are returned, FALSE if not.)
-     * @access    public
+     * @throws Exception
      */
     public function getContributors($limit = null, $fields = '*', $order = 'id', $direction = 'ASC', $where = '')
     {
@@ -490,6 +481,7 @@ class Contributor extends User
                     $value['lname'] = $this->findLastName();
                 }
             }
+
             # Check if the passed User ID is NULL.
             if ($value !== null) {
                 # Check if the passsed $value is a User ID.
@@ -521,6 +513,7 @@ class Contributor extends User
                     # Reset the $value variable with the contributor's id.
                     $value = array($field => $this->getContID());
                 }
+
                 # Create the WHERE sql statement.
                 # Create an empty array to hold the WHERE statement pieces.
                 $where = array();
@@ -536,6 +529,7 @@ class Contributor extends User
                     }
                     $where[] = '`' . $table . '` ' . $t_value;
                 }
+
                 # Implode the $where array to join the pieces with "AND".
                 $where = implode(' AND ', $where);
                 # Create a new IP object.
@@ -756,12 +750,11 @@ class Contributor extends User
     }
 
     /**
-     * setContID
      * Sets the data member $cont_id.
      *
      * @param        $cont_id (The Contributor's ID number.)
      *
-     * @access    protected
+     * @throws Exception
      */
     protected function setContID($cont_id)
     {
@@ -826,10 +819,6 @@ class Contributor extends User
             $this->cont_lname = null;
         }
     }
-
-    /*** End accessor methods ***/
-
-    /*** public methods ***/
 
     /**
      * setContEmail
@@ -998,5 +987,4 @@ class Contributor extends User
         # Set the data member
         $this->user = $user;
     }
-    /*** End public methods ***/
 }

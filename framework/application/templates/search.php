@@ -1,15 +1,14 @@
-<?php /* framework/application/templates/search.php */
+<?php
 
-# Get the FormGenerator Class.
-require_once Utility::locateFile(MODULES.'Form'.DS.'FormGenerator.php');
-# Get the SearchFormProcessor Class.
-require_once Utility::locateFile(MODULES.'Form'.DS.'SearchFormProcessor.php');
+use Mamook\Form\SearchFormProcessor;
+use Mamook\Utility\Utility;
+
 # Instantiate a new SearchFormProcessor object.
-$search_form_processor=new SearchFormProcessor();
+$search_form_processor = new SearchFormProcessor();
 
 # Get the search form.
-require Utility::locateFile(TEMPLATES.'forms'.DS.'search_form.php');
+require Utility::locateFile(TEMPLATES . 'forms' . DS . 'search_form.php');
 
-echo '<section id="searchbox">'.
-	$display_search_form.
-'</section>';
+echo '<section id="searchbox">' .
+    $display_search_form .
+    '</section>';

@@ -153,7 +153,7 @@ class Validator
      * @param    $email (The email to check.)
      * @param    $ping  (Should it ping the domain name to see if it is an active domain?)
      *
-     * @access    public
+     * @return bool|True
      */
     public function validEmail($email, $ping = false)
     {
@@ -165,8 +165,6 @@ class Validator
         # Check if the passed email address is NOT empty. It should be at least 5 characters and no more than 256 characters.
         $empty_email = $this->isEmpty($email, 5, 256);
         if ($empty_email === false) {
-            # Get the EmailAddressValidator class and instantiate a new instance.
-            require_once Utility::locateFile(MODULES . 'Validator' . DS . 'EmailAddressValidator.php');
             $validate = new EmailAddressValidator();
             $valid = $validate->check_email_address($email, $ping);
         }
@@ -222,11 +220,8 @@ class Validator
     } #==== End -- validURL
 
     /**
-     * isSSL
      * Determines if the connection is secure.
      * Returns FALSE if not.
-     *
-     * @access    public
      */
     public function isSSL()
     {

@@ -3,7 +3,12 @@
 namespace Mamook\User;
 
 use DB;
+use ezDB_Error;
+use Mamook\Document\Document;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\Utility\Utility;
+use Mamook\Validator\Validator;
+use Mamook\WebUtility\WebUtility;
 
 # Make sure the script is not accessed directly.
 if (!defined('BASE_PATH')) {
@@ -1195,11 +1200,12 @@ class User
     }
 
     /**
-     * checkLogin
      * Applies restrictions to visitors based on membership and level access
      * Also handles cookie based "remember me" feature
      *
      * @param string $levels The access_level number(s) to accept - ie. '1 2 5'
+     *
+     * @throws Exception
      */
     public function checkLogin($levels)
     {
@@ -1228,10 +1234,6 @@ class User
             $doc->redirect(REDIRECT_AFTER_LOGIN);
         }
     }
-
-    /*** End accessor methods ***/
-
-    /*** public methods ***/
 
     /**
      * Performs a check to determine if one parameter is unique in the Database.
@@ -1402,10 +1404,6 @@ class User
             throw $e;
         }
     }
-
-    /*** End accessor methods ***/
-
-    /*** public methods ***/
 
     /**
      * Creates a new account in the database.
@@ -2024,6 +2022,7 @@ class User
      * @param bool $for_insert_query Convert IP addresss to binary for database.
      *
      * @return string
+     * @throws Exception
      */
     public function findIP($for_insert_query = true)
     {
@@ -2372,6 +2371,7 @@ class User
                     $id = $this->getID();
                 }
             }
+
             # Check if the ID was found.
             if (!empty($id)) {
                 # Retrieve the User data from the `users` table.
@@ -2530,6 +2530,7 @@ class User
      * @param string $field The users Email or id.
      *
      * @return null
+     * @throws Exception
      */
     public function findUsername($field = null)
     {
@@ -2828,14 +2829,13 @@ class User
      *                                        If NULL, then the method gets the logged in user's ID.
      *
      * @return boolean
+     * @throws Exception
      */
     public function isStaff($value = null)
     {
         # Set the Validator instance to a variable.
         $validator = Validator::getInstance();
 
-        # Get the Staff class.
-        require_once Utility::locateFile(MODULES . 'User' . DS . 'Staff.php');
         # Set the Staff instance to a variable.
         $staff_obj = new Staff();
 
@@ -2852,6 +2852,7 @@ class User
                 $id = $this->getID();
             }
         }
+
         # Check if logged in user is in the `staff` table.
         if ($staff_obj->isStaff($id) === true) {
             return true;
@@ -3376,10 +3377,6 @@ class User
         return false;
     }
 
-    /*** End protected methods ***/
-
-    /*** private methods ***/
-
     /**
      * Clears the WordPress cookies
      * TODO: MOVE TO WEBUTILITIES
@@ -3464,5 +3461,4 @@ class User
         # Return the password (for backwards compatibility).
         return $this->getWPPassword();
     }
-    /*** End protected methods ***/
 }

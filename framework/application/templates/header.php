@@ -1,4 +1,6 @@
-<?php /* framework/application/templates/header.php */
+<?php
+
+use Mamook\WebUtility\WebUtility;
 
 # Define the DOCTYPE. This site is using html5
 $header='<!DOCTYPE html>';

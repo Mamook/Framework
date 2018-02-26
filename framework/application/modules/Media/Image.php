@@ -3,8 +3,7 @@
 namespace Mamook\Media;
 
 use DB;
-use Document;
-use ezDB_Error;
+use Mamook\Document\Document;
 use Mamook\ExceptionHandler\Exception;
 use Mamook\FileHandler\FileHandler;
 use Mamook\Validator\Validator;
@@ -287,7 +286,7 @@ class Image extends Media
                 # Check if the passed redirect URL was FALSE.
                 if ($redirect === false) {
                     # Set the value to NULL (no redirect).
-                    $redirect === null;
+                    $redirect = null;
                 }
                 # Validate the passed id as an integer.
                 if ($validator->isInt($id) === true) {

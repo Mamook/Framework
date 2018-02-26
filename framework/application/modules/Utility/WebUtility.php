@@ -2,6 +2,7 @@
 
 namespace Mamook\WebUtility;
 
+use Mamook\IP\IP;
 use Mamook\Utility\Utility;
 
 # Make sure the script is not accessed directly.
@@ -18,20 +19,17 @@ if (!defined('BASE_PATH')) {
 class WebUtility extends Utility
 {
     /**
-     * findIP
      * A wrapper method for findIP() from the IP calss.
      * Returns the IP of the visitor.
      * Throws an error if the IP address is not valid.
      *
      * @param    bool $for_insert_query Convert IP addresss to binary for database.
      *
-     * @access    public
      * @return    string
+     * @throws \Mamook\ExceptionHandler\Exception
      */
     public static function findIP($for_insert_query = true)
     {
-        # Get the IP Class.
-        require_once Utility::locateFile(MODULES . 'IP' . DS . 'IP.php');
         # Create a new IP object.
         $ip_obj = IP::getInstance();
         # Set the visitor's IP addreess.
@@ -44,13 +42,12 @@ class WebUtility extends Utility
     } #==== End -- findIP
 
     /**
-     * removeGetQuery
      * Removes GET query from the passed URL.
      * Must be called before removeIndex method.
      *
-     * @param    $url                    The URL to check.
+     * @param string $url The URL to check.
      *
-     * @access    public
+     * @return mixed|string
      */
     public static function removeGetQuery($url)
     {
@@ -65,12 +62,11 @@ class WebUtility extends Utility
     } #==== End -- removeGetQuery
 
     /**
-     * removePageQuery
      * Removes "?page=#" query from the passed URL.
      *
-     * @param    $url                    The URL to check.
+     * @param string $url The URL to check.
      *
-     * @access    public
+     * @return null|string|string[]
      */
     public static function removePageQuery($url)
     {
@@ -83,12 +79,11 @@ class WebUtility extends Utility
     } #==== End -- removePageQuery
 
     /**
-     * removeSchemeName
      * Removes scheme name (ie http://) from the passed URL.
      *
-     * @param    $url                    The URL to check.
+     * @param string $url The URL to check.
      *
-     * @access    public
+     * @return null|string|string[]
      */
     public static function removeSchemeName($url)
     {

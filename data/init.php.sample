@@ -1,132 +1,124 @@
-<?php /* data/init.php */
+<?php
 
-# Make sure the utility methods are available (get the WebUtility Class).
-require_once WEBUTILITY_CLASS;
+use Mamook\Content\Content;
+use Mamook\Document\Document;
+use Mamook\Document\Theme;
+use Mamook\Session\Session;
+use Mamook\User\User;
+use Mamook\Utility\Utility;
 
-# If WordPress is installed, get the appropriate settings.
-if(WP_INSTALLED===TRUE)
-{
-	require_once DATA_FILES.'WordPress_settings.php';
+try {
+    # If WordPress is installed, get the appropriate settings.
+    if (WP_INSTALLED === true) {
+        require_once DATA_FILES . 'WordPress_settings.php';
+    }
+
+    # Create a new Document object.
+    $doc = Document::getInstance();
+
+    # How do we handle errors?
+    error_reporting(0);
+
+    # No custom error handling if we are already on the error page.
+    if (strpos(APPLICATION_URL . HERE, ERROR_PAGE) === false) {
+        # Set custom error handling
+        set_error_handler('myErrorHandler');
+    }
+
+    # For IE7 Sessions.
+    if (HERE !== HERE_PATH) {
+        throw new Exception('On the page ' . FULL_URL . ', the constant "HERE" (' . HERE . ') did not match the constant "HERE_PATH" (' . HERE_PATH . ')',
+            E_RECOVERABLE_ERROR);
+    }
+
+    # Get the DB Class needed to operate with MySQL.
+    require_once Utility::locateFile(MODULES . 'Vendor' . DS . 'ezDB' . DS . 'ezdb.class.php');
+    DB::init(DB_TYPE);
+    $db = DB::get_instance();
+    $db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
+
+    # Create a new Theme object.
+    $theme = new Theme();
+
+    # Define THEME as the URL to the default symlink theme folder. (ends with a slash)
+    define('THEME',
+        (($validator->isSSL() === true) ? SECURE_URL . 'themes/' . $theme->getName() . '/' : APPLICATION_URL . 'themes/' . $theme->getName() . '/'));
+
+    # The absolute path to the default symlink theme folder. (ends with a slash)
+    define('THEME_PATH',
+        (($validator->isSSL() === true) ? BASE_PATH . 'public' . DS . 'secure' . DS . 'themes' . DS . $theme->getName() . DS : BASE_PATH . 'public' . DS . 'themes' . DS . $theme->getName() . DS));
+
+    # Create a variable for the site designer's website.
+    $designer_site = $theme->getWebsite();
+    # Set the designer for the designer meta tag in header.php
+    $meta_designer = $theme->getDesigner() . ((!empty($designer_site)) ? ', ' . $designer_site : '');
+
+    if (!preg_match('/\bsecure\b(?!\/login)/i', FULL_DOMAIN . HERE, $matches)) {
+        // 	# Create an Array with properties for the default stylesheet.
+        // 	$default_JSON=array(
+        // 		"device"=>"all"
+        // 	);
+        // 	# Convert the Array to JSON.
+        // 	$default_JSON=json_encode($default_JSON);
+        // 	# Create an Array with properties for the default stylesheet at a 784px width breakpoint.
+        // 	$default_784_JSON=array(
+        // 		"device"=>"screen",
+        // 		"property"=>"max-width",
+        // 		"value"=>"784px",
+        // 		"tag"=>"784"
+        // 	);
+        // 	# Convert the Array to JSON.
+        // 	$default_784_JSON=json_encode($default_784_JSON);
+        // 	# Create an Array with properties for the default stylesheet at a 1014px width breakpoint.
+        // 	$default_1014_JSON=array(
+        // 		"device"=>"screen",
+        // 		"property"=>"max-width",
+        // 		"value"=>"1014px",
+        // 		"tag"=>"1014"
+        // 	);
+        // 	# Convert the Array to JSON.
+        // 	$default_1014_JSON=json_encode($default_1014_JSON);
+        // 	# Set the default style sheet(s) we are using for the front-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder). Concatenate any stysheet property JSON to the path. Comma separate any additional stylesheets. Or include them as an Array.
+        // 	$doc->setStyle(array(
+        // 		'default'.$default_JSON.$default_784_JSON.$default_1014_JSON,
+        // 		THEME.'css/other.css'
+        // 	));
+        // 	$doc->setStyle('default.css'.$default_JSON.$default_784_JSON.$default_1014_JSON.','.THEME.'css/other.css');
+
+        # Set the default style sheet(s) we are using for the front-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder. This will append the ".css" fileextension.)
+        $doc->setStyle('default');
+    } else {
+        # Set the secure style sheet(s) we are using for the back-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder).
+        $doc->setStyle('secure');
+    }
+
+    # Set the default JavaScripts we are using for the site.
+    $doc->setJavaScripts('plugins');
+
+    # Create a default variable for the fwPopUp settings.
+    # If you want to remove even the defaults, pass
+    # $doc->setFwPopUpSettings('{}');
+    # Otherwise, set the new values like:
+    # $doc->setFwPopUpSettings('{opacity:0.8,theme:"CoolTheme",markup:{socialTools:null},deepLinking:false}');
+    $doc->setFwPopUpSettings('{}');
+    # Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
+    $doc->setFooterJS('scripts');
+
+    # Check if there is a session id set the the $sesh_id variable.
+    $sesh_id = ((isset($sesh_id)) ? $sesh_id : null);
+    # Create a new session object, thus starting a new session.
+    $session = Session::getInstance(null, null, null, $sesh_id);
+    # Remember what page we're on.
+    $session->setPostLogin();
+
+    # Set the link for the page image to the default of "lightbox". This will cause the image to open in a popup.
+    $image_link = FW_POPUP_HANDLE;
+
+    # Instantiate the User Class.
+    $login = new User();
+
+    # Create a new Content object.
+    $main_content = Content::getInstance();
+} catch (Exception $e) {
+    throw new $e;
 }
-
-# Get the Document Class.
-require_once Utility::locateFile(MODULES.'Document'.DS.'Document.php');
-# Create a new Document object.
-$doc=Document::getInstance();
-
-# How do we handle errors?
-error_reporting(0);
-
-# Get the ExceptionHandler Class.
-require_once Utility::locateFile(MODULES.'ExceptionHandler'.DS.'ExceptionHandler.php');
-# No custom error handling if we are already on the error page.
-if(strpos(APPLICATION_URL.HERE, ERROR_PAGE)===FALSE)
-{
-	# Set custom error handling
-	set_error_handler('myErrorHandler');
-}
-
-# For IE7 Sessions.
-if(HERE!==HERE_PATH)
-{
-	throw new Exception('On the page '.FULL_URL.', the constant "HERE" ('.HERE.') did not match the constant "HERE_PATH" ('.HERE_PATH.')', E_RECOVERABLE_ERROR);
-}
-
-# Get the DB Class needed to operate with MySQL.
-require_once Utility::locateFile(MODULES.'Vendor'.DS.'ezDB'.DS.'ezdb.class.php');
-DB::init(DB_TYPE);
-$db=DB::get_instance();
-$db->quick_connect(DBUSER, DBPASS, DBASE, HOSTNAME);
-
-# Get the Theme Class.
-require_once Utility::locateFile(MODULES.'Document'.DS.'Theme.php');
-# Create a new Theme object.
-$theme=new Theme();
-
-# Define THEME as the URL to the default symlink theme folder. (ends with a slash)
-define('THEME', (($validator->isSSL()===TRUE) ? SECURE_URL.'themes/'.$theme->getName().'/' : APPLICATION_URL.'themes/'.$theme->getName().'/'));
-
-# The absolute path to the default symlink theme folder. (ends with a slash)
-define('THEME_PATH', (($validator->isSSL()===TRUE) ? BASE_PATH.'public'.DS.'secure'.DS.'themes'.DS.$theme->getName().DS : BASE_PATH.'public'.DS.'themes'.DS.$theme->getName().DS));
-
-# Create a variable for the site designer's website.
-$designer_site=$theme->getWebsite();
-# Set the designer for the designer meta tag in header.php
-$meta_designer=$theme->getDesigner().((!empty($designer_site)) ? ', '.$designer_site : '');
-
-if(!preg_match('/\bsecure\b(?!\/login)/i', FULL_DOMAIN.HERE, $matches))
-{
-// 	# Create an Array with properties for the default stylesheet.
-// 	$default_JSON=array(
-// 		"device"=>"all"
-// 	);
-// 	# Convert the Array to JSON.
-// 	$default_JSON=json_encode($default_JSON);
-// 	# Create an Array with properties for the default stylesheet at a 784px width breakpoint.
-// 	$default_784_JSON=array(
-// 		"device"=>"screen",
-// 		"property"=>"max-width",
-// 		"value"=>"784px",
-// 		"tag"=>"784"
-// 	);
-// 	# Convert the Array to JSON.
-// 	$default_784_JSON=json_encode($default_784_JSON);
-// 	# Create an Array with properties for the default stylesheet at a 1014px width breakpoint.
-// 	$default_1014_JSON=array(
-// 		"device"=>"screen",
-// 		"property"=>"max-width",
-// 		"value"=>"1014px",
-// 		"tag"=>"1014"
-// 	);
-// 	# Convert the Array to JSON.
-// 	$default_1014_JSON=json_encode($default_1014_JSON);
-// 	# Set the default style sheet(s) we are using for the front-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder). Concatenate any stysheet property JSON to the path. Comma separate any additional stylesheets. Or include them as an Array.
-// 	$doc->setStyle(array(
-// 		'default'.$default_JSON.$default_784_JSON.$default_1014_JSON,
-// 		THEME.'css/other.css'
-// 	));
-// 	$doc->setStyle('default.css'.$default_JSON.$default_784_JSON.$default_1014_JSON.','.THEME.'css/other.css');
-
-	# Set the default style sheet(s) we are using for the front-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder. This will append the ".css" fileextension.)
-	$doc->setStyle('default');
-}
-else
-{
-	# Set the secure style sheet(s) we are using for the back-end of the site. (May be an absolute location or the filename. If only the filename is used, the file must exist in the current Theme's CSS folder).
-	$doc->setStyle('secure');
-}
-
-# Set the default JavaScripts we are using for the site.
-$doc->setJavaScripts('plugins');
-
-
-# Create a default variable for the fwPopUp settings.
-# If you want to remove even the defaults, pass
-# $doc->setFwPopUpSettings('{}');
-# Otherwise, set the new values like:
-# $doc->setFwPopUpSettings('{opacity:0.8,theme:"CoolTheme",markup:{socialTools:null},deepLinking:false}');
-$doc->setFwPopUpSettings('{}');
-# Do we need some JavaScripts in the footer? (Use the script file name before the ".php".)
-$doc->setFooterJS('scripts');
-
-# Get the Session Class
-require_once Utility::locateFile(MODULES.'Session'.DS.'Session.php');
-# Check if there is a session id set the the $sesh_id variable.
-$sesh_id=((isset($sesh_id)) ? $sesh_id : NULL);
-# Create a new session object, thus starting a new session.
-$session=Session::getInstance(NULL, NULL, NULL, $sesh_id);
-# Remember what page we're on.
-$session->setPostLogin();
-
-# Set the link for the page image to the default of "lightbox". This will cause the image to open in a popup.
-$image_link=FW_POPUP_HANDLE;
-
-# Get the User Class.
-require_once Utility::locateFile(MODULES.'User'.DS.'User.php');
-# Instantiate the User Class.
-$login=new User();
-
-# Get the Content Class.
-require_once Utility::locateFile(MODULES.'Content'.DS.'Content.php');
-# Create a new Content object.
-$main_content=Content::getInstance();

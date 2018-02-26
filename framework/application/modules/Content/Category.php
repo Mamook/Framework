@@ -1,13 +1,11 @@
-<?php /* framework/application/modules/Content/Category.php */
+<?php
 
 namespace Mamook\Content;
 
-# Make sure the script is not accessed directly.
-use DB;
-use ezDB_Error;
 use Mamook\ExceptionHandler\Exception;
 use Mamook\Validator\Validator;
 
+# Make sure the script is not accessed directly.
 if (!defined('BASE_PATH')) {
     exit('No direct script access allowed');
 }
