@@ -29,6 +29,10 @@
     "post-root-package-install": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
       "@php -r \"file_exists('settings.php') || copy('settings.php.sample', 'settings.php');\"",
+      "@php -r \"file_exists('cron/api_sync.php') || copy('cron/api_sync.php.sample', 'cron/api_sync.php');\"",
+      "@php -r \"file_exists('cron/branch_update_notifier.php') || copy('cron/branch_update_notifier.php.sample', 'cron/branch_update_notifier.php');\"",
+      "@php -r \"file_exists('cron/new_media.php') || copy('cron/new_media.php.sample', 'cron/new_media.php');\"",
+      "@php -r \"file_exists('cron/user_delete_warning.php') || copy('cron/user_delete_warning.php.sample', 'cron/user_delete_warning.php');\"",
       "@php -r \"file_exists('data/API_definitions.php') || copy('data/API_definitions.php.sample', 'data/API_definitions.php');\"",
       "@php -r \"file_exists('data/database_definitions.php') || copy('data/database_definitions.php.sample', 'data/database_definitions.php');\"",
       "@php -r \"file_exists('data/email_definitions.php') || copy('data/email_definitions.php.sample', 'data/email_definitions.php');\"",
