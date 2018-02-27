@@ -25,7 +25,11 @@
       "Mamook\\": [
         "framework/application/modules/"
       ]
-    }
+    },
+    "classmap": [
+      "framework/application/modules/Vendor/",
+      "framework/application/vendor/"
+    ]
   },
   "scripts": {
     "post-install-cmd": [
