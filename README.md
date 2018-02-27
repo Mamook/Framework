@@ -11,6 +11,7 @@ Make sure your project directory is empty and run `composer create-project mamoo
 Make sure you're in your root project directory.
 
 * `composer require mamook/framework`
+* `composer run-script post-install-cmd -d ./vendor/mamook/framework/`
 * `cp -r vendor/mamook/bodega . && cp vendor/mamook/cache . && cp -r vendor/mamook/cron . && mkdir custom_sessions && cp -r vendor/mamook/data . && cp -r vendor/mamook/dev . && mkdir logs && cp -r vendor/mamook/tmp . && cp -r vendor/mamook/public . && cp vendor/mamook/settings.php .`
 * `chmod 777 bodega/ bodega/audio/ bodega/cv/ bodega/premium/ bodega/videos/ cache/ custom_sessions/ data/formmail.ini logs/ public/images/ public/images/original/ public/media/audio/files/ public/media/videos/files/ tmp/`
 

@@ -26,7 +26,7 @@
     }
   },
   "scripts": {
-    "post-package-install": [
+    "post-install-cmd": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
       "@php -r \"file_exists('settings.php') || copy('settings.php.sample', 'settings.php');\"",
       "@php -r \"file_exists('cron/api_sync.php') || copy('cron/api_sync.php.sample', 'cron/api_sync.php');\"",
