@@ -2,10 +2,10 @@
 
 namespace Mamook\Form;
 
-use DB;
 use Mamook\Content\Branch;
 use Mamook\Document\Document;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 
 # Make sure the script is not accessed directly.
 if (!defined('BASE_PATH')) {

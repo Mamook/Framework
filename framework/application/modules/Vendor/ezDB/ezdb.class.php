@@ -28,6 +28,8 @@
  * Based on ezSQL by Justin Vincent: http://justinvincent.com/docs/ezsql/ez_sql_help.htm
  */
 
+namespace Mamook\ezDB;
+
 /**
  * This is the < PHP 5.3 version
  *

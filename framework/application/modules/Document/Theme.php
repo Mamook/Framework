@@ -2,10 +2,10 @@
 
 namespace Mamook\Document;
 
-use DB;
 use ezDB_Error;
 use Mamook\Content\Content;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 
 /***
  * Theme

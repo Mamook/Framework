@@ -2,10 +2,10 @@
 
 namespace Mamook\Content;
 
-use DB;
 use Mamook\API\API;
 use Mamook\Document\Document;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 use Mamook\Media\Image;
 use Mamook\Utility\Utility;
 use Mamook\Validator\Validator;

@@ -2,9 +2,9 @@
 
 namespace Mamook\Email;
 
-use DB;
 use Mamook\FileHandler\FileHandler;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 use Mamook\Utility\Utility;
 use Mamook\Validator\Validator;
 use PHPMailer\PHPMailer\PHPMailer;

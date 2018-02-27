@@ -2,9 +2,9 @@
 
 namespace Mamook\Media;
 
-use DB;
 use Mamook\Document\Document;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 use Mamook\FileHandler\FileHandler;
 use Mamook\Validator\Validator;
 

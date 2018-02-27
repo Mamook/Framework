@@ -2,9 +2,9 @@
 
 namespace Mamook\Content;
 
-use DB;
 use ezDB_Error;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 use Mamook\Validator\Validator;
 
 # Make sure the script is not accessed directly.

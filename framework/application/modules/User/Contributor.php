@@ -2,9 +2,9 @@
 
 namespace Mamook\User;
 
-use DB;
 use ezDB_Error;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 use Mamook\IP\IP;
 use Mamook\Validator\Validator;
 

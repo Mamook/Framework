@@ -3,8 +3,8 @@
 namespace Mamook\Content;
 
 use Audio;
-use DB;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 use Mamook\Media\File;
 use Mamook\Media\Image;
 use Mamook\User\Contributor;

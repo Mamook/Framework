@@ -2,10 +2,10 @@
 
 namespace Mamook\User;
 
-use DB;
 use ezDB_Error;
 use Mamook\Document\Document;
 use Mamook\ExceptionHandler\Exception;
+use Mamook\ezDB\DB;
 use Mamook\Utility\Utility;
 use Mamook\Validator\Validator;
 use Mamook\WebUtility\WebUtility;
